@@ -11,11 +11,11 @@ import {
   fetchNotes,
 } from './services/noteService';
 
-import SearchBox from '././SearchBox/SearchBox';
-import Pagination from '././Pagination/Pagination';
-import NoteList from '././NoteList/NoteList';
-import Modal from '././Modal/Modal';
-import NoteForm from '././NoteForm/NoteForm';
+import SearchBox from '././components/SearchBox/SearchBox';
+import Pagination from '././components/Pagination/Pagination';
+import NoteList from '././components/NoteList/NoteList';
+import Modal from './components/Modal/Modal';
+import NoteForm from './components/NoteForm/NoteForm';
 
 export default function App() {
   const [page, setPage] = useState(1);
