@@ -1,15 +1,12 @@
 import { useState } from 'react';
-import css from './App.module.css';
 
 import { useDebouncedCallback } from 'use-debounce';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import {
-  createNote,
-  deleteNote,
-  fetchNotes,
-} from '../../services/noteService';
+import css from './App.module.css';
+
+import { fetchNotes } from '../../services/noteService';
 
 import SearchBox from '../SearchBox/SearchBox';
 import Pagination from '../Pagination/Pagination';
@@ -23,8 +20,7 @@ export default function App() {
   const [search, setSearch] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const queryClient = useQueryClient();
+    useState(false);
 
   const debouncedSearch = useDebouncedCallback(
     (value: string) => {
@@ -34,32 +30,16 @@ export default function App() {
     500
   );
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['notes', page, search],
-    queryFn: () => fetchNotes({ page, search }),
-  });
+  const { data, isLoading, isError } =
+    useQuery({
+      queryKey: ['notes', page, search],
 
-  const createMutation = useMutation({
-    mutationFn: createNote,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['notes'],
-      });
-
-      setIsModalOpen(false);
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteNote,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['notes'],
-      });
-    },
-  });
+      queryFn: () =>
+        fetchNotes({
+          page,
+          search,
+        }),
+    });
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -94,19 +74,17 @@ export default function App() {
       </header>
 
       {data && data.notes.length > 0 && (
-        <NoteList
-          notes={data.notes}
-          onDelete={deleteMutation.mutate}
-        />
+        <NoteList notes={data.notes} />
       )}
 
       {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
+        <Modal
+          onClose={() => setIsModalOpen(false)}
+        >
           <NoteForm
-            onCancel={() => setIsModalOpen(false)}
-            onSubmit={(values) => {
-              createMutation.mutate(values);
-            }}
+            onCancel={() =>
+              setIsModalOpen(false)
+            }
           />
         </Modal>
       )}
