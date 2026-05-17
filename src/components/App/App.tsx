@@ -33,12 +33,13 @@ export default function App() {
   const { data, isLoading, isError } =
     useQuery({
       queryKey: ['notes', page, search],
-
       queryFn: () =>
         fetchNotes({
           page,
           search,
         }),
+      placeholderData: (previousData) =>
+      previousData,
     });
 
   if (isLoading) {
