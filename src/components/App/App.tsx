@@ -20,8 +20,7 @@ export default function App() {
   const [search, setSearch] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-    useState(false);
-
+   
   const debouncedSearch = useDebouncedCallback(
     (value: string) => {
       setSearch(value);
